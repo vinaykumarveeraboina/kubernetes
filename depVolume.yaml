@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rro
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: rro
+  template:
+    metadata:
+      labels:
+        app: rro
+    spec:
+      volumes:
+        - name: mnt
+          hostPath:
+            path: /mnt
+      containers:
+        - name: busybox
+          image: busybox
+          command: ["sh", "-c"]
+          args: ["echo testing !!! > /mnt-rw/success.txt && sleep infinity"]
+          volumeMounts:
+            - name: mnt
+              mountPath: /mnt-rro
+              readOnly: true
+            - name: mnt
+              mountPath: /mnt-ro
+              readOnly: false
+            - name: mnt
+              mountPath: /mnt-rw
+              readOnly: false

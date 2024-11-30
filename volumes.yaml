@@ -8,7 +8,6 @@ spec:
       hostPath:
         # tmpfs is mounted on /mnt/tmpfs
         path: /mnt
-  replicas: 3      
   containers:
     - name: busybox
       image: busybox
