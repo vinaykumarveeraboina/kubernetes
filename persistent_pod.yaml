@@ -5,7 +5,7 @@ metadata:
 spec:
   volumes:
     - name: mnt
-      persistentVolumeReclaim:
+      persistentVolumeclaim:
        claimName: mypvc   # we are calling PVC name 
   containers:
   - name: busybox
