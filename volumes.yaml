@@ -11,19 +11,20 @@ spec:
   containers:
     - name: busybox
       image: busybox
-      args: ["sleep", "infinity"]
-      command : ["sh", "-c","echo testing !!! > /mnt/sucess.txt" ]
+      command: ["sh", "-c"]
+      args: ["echo testing !!! > /mnt-rw/success.txt && sleep infinity"]
       volumeMounts:
         # /mnt-rro/tmpfs is not writable
         - name: mnt
           mountPath: /mnt-rro
           readOnly: true
           mountPropagation: None
-          recursiveReadOnly: Enabled
         # /mnt-ro/tmpfs is writable
         - name: mnt
           mountPath: /mnt-ro
-          readOnly: true
+          readOnly: false
         # /mnt-rw/tmpfs is writable
         - name: mnt
           mountPath: /mnt-rw
+          readOnly: false
+
