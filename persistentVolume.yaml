@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mypv
+spec:
+  capacity:
+    storage: 0.5Gi
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+   server: 20.162.192.19
+   path: /opt/sfw
+   readOnly: False
+  persistentVolumeReclaimPolicy: Retain
+  
