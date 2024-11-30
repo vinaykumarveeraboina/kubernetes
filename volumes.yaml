@@ -3,18 +3,16 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: myvolum
-  labels:
-    name:  myvolum
-spec: 
+  name: host-pod
+spec:
  volumes:
- - name : my-volume
-   hostPath :
-    path : /var/data
+ - name: myvolume
+   hostPath:
+     path: /root/var/kubernetes/YAML/kubernetes
  containers:
-  - name: myapp
-    image: busybox
-    command: ["sh", "-c", "echo Testing !!!!! > /output/out/sucess.txt" ]
-    volumeMounts:
-     - name : my-volume  # it should match with name of the volumes(line number 11) 
-       mountPath : /output
+ - image: busybox
+   name: busybonx
+   command: ["sh","-c","echo Testing!!! > /output/sucess.txt"]
+   volumeMounts:
+   - name: myvolume
+     mountPath: /output
