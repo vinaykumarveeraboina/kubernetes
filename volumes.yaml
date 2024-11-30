@@ -1,0 +1,20 @@
+## hostpath volume example 
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapps
+  labels:
+    name: myapps
+spec: 
+ volumes:
+ - name : my-volume
+   hostPath :
+    path : /var/data
+ containers:
+  - name: myapp
+    image: busybox
+    command: ["sh", "-c", "echo Testing !!!!! > /output/out/sucess.txt" ]
+    volumeMounts:
+     - name : my-volume  # it should match with name of the volumes(line number 11) 
+       mountPath : /output
