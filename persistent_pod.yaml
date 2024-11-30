@@ -6,13 +6,13 @@ spec:
   volumes:
     - name: mnt
       persistentVolumeReclaim:
-      claimName: mypvc   # we are calling PVC name 
+       claimName: mypvc   # we are calling PVC name 
   containers:
   - name: busybox
     image: busybox
     command: ["sh", "-c"]
     args: ["echo testing !!! > /mnt-rw/success.txt && sleep infinity"]
-  volumeMounts:
-  - name: mnt
-    mountPath: /mnt-rw
+    volumeMounts:
+    - name: mnt
+      mountPath: /mnt-rw
          
