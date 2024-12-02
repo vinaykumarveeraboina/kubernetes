@@ -38,6 +38,6 @@ spec:
    image: nginx
  tolerations:
  - key: "colour"
-   operator: "equal"
+   operator: "Equal"
    value: "orange"
    effect: "NoSchedule"   
