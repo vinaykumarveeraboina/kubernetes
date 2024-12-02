@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp
+  labels:
+    name: myapp
+spec:
+ nodeName: gke-cluster-1-default-pool-2a436580-17pm
+ containers:
+ - name: myapp
+   image: nginx
+    
