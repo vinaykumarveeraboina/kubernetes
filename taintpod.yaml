@@ -8,7 +8,7 @@ spec:
    image: nginx
  tolerations:
  - key: "colour"
-   operator: "EQUALS"
+   operator: "Equal"
    value: "blue"
    effect: "NoSchedule"
   
@@ -23,7 +23,7 @@ spec:
    image: nginx
  tolerations:
  - key: "colour"
-   operator: "EQUALS"
+   operator: "Equal"
    value: "green"
    effect: "NoSchedule"
 
@@ -38,6 +38,6 @@ spec:
    image: nginx
  tolerations:
  - key: "colour"
-   operator: "EQUALS"
+   operator: "equal"
    value: "orange"
    effect: "NoSchedule"   
