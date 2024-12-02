@@ -17,7 +17,7 @@ spec:
         name: myapp
      affinity:
        nodeAffinity:
-        requiredDuringSchedulingPreferredDuringExecution:
+        requiredDuringSchedulingIgnoredDuringExecution:
          nodeSelectorTerms:
          - matchExpressions:
             - key : disktype
