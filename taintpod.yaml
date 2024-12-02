@@ -3,6 +3,8 @@ kind: Pod
 metadata: 
   name: bluepod
 spec:
+ nodeSelector: 
+  colour: bule
  containers:
  - name: n1
    image: nginx
@@ -18,6 +20,8 @@ kind: Pod
 metadata: 
   name: greenpod
 spec:
+ nodeSelector: 
+  colour: green
  containers:
  - name: n1
    image: nginx
@@ -33,6 +37,8 @@ kind: Pod
 metadata: 
   name: orangepod
 spec:
+ nodeSelector: 
+  colour: orange
  containers:
  - name: n1
    image: nginx
