@@ -21,7 +21,7 @@ spec:
          nodeSelectorTerms:
          - matchExpressions:
             - key : disktype
-              operators: In 
+              operator: In 
               values: 
                - ssd
                - thin
