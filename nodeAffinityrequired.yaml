@@ -16,7 +16,7 @@ spec:
       - image: nginx
         name: myapp
      affinity:
-       nodeaffinity:
+       nodeAffinity:
         requiredDuringSchedulingPreferredDuringExecution:
          nodeSelectorTerms:
          - matchExpressions:
