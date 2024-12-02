@@ -9,7 +9,7 @@ spec:
  tolerations:
  - key: "colour"
    operator: "Equal"
-   value: "blue"
+   value: "bule"
    effect: "NoSchedule"
   
 ---
