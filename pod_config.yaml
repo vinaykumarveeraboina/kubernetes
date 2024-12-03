@@ -7,11 +7,11 @@ spec:
   - name: myapp
     image: busybox
     command : [ "sh", "-c" ," echo configmap is $  && sleep 30"]
-  env:
-   - name : configvalue
-     valueFrom :
-      ConfigMapKeyRef: 
-       name : myapp
-       key : name
+    env:
+     - name : configvalue
+       valueFrom :
+       ConfigMapKeyRef: 
+        name : myapp
+        key : name
 
    
