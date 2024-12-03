@@ -10,7 +10,7 @@ spec:
     env:
      - name : configvalue
        valueFrom :
-       ConfigMapKeyRef: 
+       configMapKeyRef: 
         name : myapp
         key : name
 
