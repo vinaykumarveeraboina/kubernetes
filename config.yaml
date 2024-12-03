@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: myapp
+data:
+  course: k8s
+  name: vinay
+  multiline : |
+   Hello
+   welcome to vinay devops
+   kubernetes
