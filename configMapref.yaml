@@ -9,6 +9,6 @@ spec:
     command : ["sleep", "3600" ]
     envFrom:
      - configMapRef:
-       name : myapp
+        name : myapp
       
      
