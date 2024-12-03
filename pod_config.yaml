@@ -6,7 +6,7 @@ spec:
   containers:
   - name: myapp
     image: busybox
-    command : [ "sh", "-c" ," echo configmap is $  && sleep 30"]
+    command : [ "sh", "-c" ," echo configmap is $configvalue  && sleep 30"]
     env:
      - name : configvalue
        valueFrom :
