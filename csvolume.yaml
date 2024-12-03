@@ -7,9 +7,9 @@ spec:
   - name: busybox
     image: busybox
     command : ["sh", "-c" ,'while true ;do sleep 3000; done']
-    volumeMount:
-      name : myvolume
-      mountPath: /config 
+    volumeMounts:
+      - name : myvolume
+        mountPath: /config 
   volumes:
     - name: myvolume
       configMap:
