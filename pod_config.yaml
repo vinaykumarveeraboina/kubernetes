@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp
+spec:
+  containers:
+  - name: myapp
+    image: busybox
+    command : [ "sh", "-c" ," echo configmap is $  && sleep 30"]
+  env:
+   - name : configvalue
+     valueFrom :
+      ConfigMapKeyRef: 
+       name : myapp
+       key : name
+
+   
