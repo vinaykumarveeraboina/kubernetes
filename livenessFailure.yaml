@@ -1,7 +1,9 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: livenesssucess
+  name: livenesssucesss
+  labels:
+   app : myapp
 spec:
  containers:
  - image: nginx
@@ -12,4 +14,26 @@ spec:
      port: 80
     initialDelaySeconds: 10
     periodSeconds: 10 
+   readinessProbe:
+     httpGet:
+      path: /
+      port: 80
+     initialDelaySeconds: 10
+     periodSeconds: 10  
+     
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: liveready
+spec:
+  selector:
+    name: myapp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
+
    
