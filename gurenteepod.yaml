@@ -13,6 +13,6 @@ spec:
        memory: "100mi"
        cpu: "100m" 
       limits:
-        memory: "100Mi"
+        memory: "100mi"
         cpu: "100m"    
     
