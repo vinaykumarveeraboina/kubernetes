@@ -10,10 +10,13 @@ spec:
       port: 80
       targetPort: 80
   type: LoadBalancer
-  livenessProbe:
-   httpGet:
-    path: /vinay
-    port: 80
-   initialDelaySeconds: 10
-   periodSeconds: 10 
+  containers:
+   image: nginx
+   name : nginx
+   livenessProbe:
+    httpGet:
+     path: /vinay
+     port: 80
+    initialDelaySeconds: 10
+    periodSeconds: 10 
    
