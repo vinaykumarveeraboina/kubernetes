@@ -1,0 +1,11 @@
+version: v1
+kind : pod 
+metadata:
+ name: alwaysRestart
+spec:
+ restratPolicy: Always 
+ container: 
+ - name: restratalways
+   image: busybox
+   command : ["sh", "-c"," echo busy busy && sleep 30 "]
+ 
