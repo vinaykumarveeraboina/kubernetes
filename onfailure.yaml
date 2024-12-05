@@ -3,7 +3,7 @@ kind : Pod
 metadata:
  name: onfailure
 spec:
- restartPolicy: onfailure
+ restartPolicy: OnFailure
  containers: 
  - name: restratalways
    image: busybox
