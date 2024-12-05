@@ -7,5 +7,5 @@ spec:
  containers: 
  - name: restratalways
    image: busybox
-   command : ["sh", "-c"," echo busy busy && sleep 30 "]
+   command : ["sh", "-c"," echo busy busy && sleep 30 werirhtn fndh "]
  
