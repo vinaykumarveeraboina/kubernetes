@@ -4,7 +4,7 @@ metadata:
  name: alwaysRestart
 spec:
  restartPolicy: Always 
- container: 
+ containers: 
  - name: restratalways
    image: busybox
    command : ["sh", "-c"," echo busy busy && sleep 30 "]
