@@ -3,7 +3,7 @@ kind : Pod
 metadata:
  name: alwaysRestart
 spec:
- restartPolicy: Always 
+ restartPolicy: Always
  containers: 
  - name: restratalways
    image: busybox
