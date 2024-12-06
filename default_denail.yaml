@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: 
+  name : default-denail
+  namespace: default
+spec:
+ podSelector: {}  # apply to everypod in that namespace 
+policyTypes:
+ -Ingress
+ -Egress
+ingress:
+- from: 
+  namespaceSelector:
+   matchLabels:
+     myy-ns: default-ns # this label name we have given to our default namspace 
+egress:
+ - to :
+   namespaceSelector:
+    matchLabels:
+     myy-ns: default-ns
+
+     
