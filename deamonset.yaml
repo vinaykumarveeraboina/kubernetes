@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: DaemonSet 
+metadata:
+ name: mydeamon 
+spec:
+ selector:
+  matchLabels:
+   name : Daemon
+ template:
+  metadate:
+   labels:
+    name: Daemon
+   spec:
+    containers:
+    - name : mycon
+      image : nginx
+ 
+
