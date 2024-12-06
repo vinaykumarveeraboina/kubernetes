@@ -7,7 +7,7 @@ spec:
   matchLabels:
    name : Daemon
  template:
-  metadate:
+  metadata:
    labels:
     name: Daemon
    spec:
