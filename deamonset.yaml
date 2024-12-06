@@ -10,7 +10,7 @@ spec:
   metadata:
    labels:
     name: Daemon
-   spec:
+  spec:
     containers:
     - name : mycon
       image : nginx
