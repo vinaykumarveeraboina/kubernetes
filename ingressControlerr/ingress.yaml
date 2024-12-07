@@ -1,0 +1,12 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: firstingress
+  annotation: 
+   kubernetes.io/ingress.class : "gce"
+spec:
+ defaultBackend:
+   service:
+    name: bluesvc
+    port:
+     number: 80
