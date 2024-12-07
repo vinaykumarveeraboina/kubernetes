@@ -15,4 +15,16 @@ spec:
       containers:
       - name: blueapp
         image: devopswithcloudhub/nginx:blue
-        
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bluesvc
+spec:
+  selector:
+    app: blue-app
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 80
+

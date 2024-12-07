@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orangedeployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orange-app
+  template:
+    metadata:
+      labels:
+        app: orange-app
+    spec:
+      containers:
+      - name: orangeapp
+        image: devopswithcloudhub/nginx:orange
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orangesvc
+spec:
+  selector:
+    app: orange-app
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 80
+
