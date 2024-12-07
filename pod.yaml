@@ -8,7 +8,6 @@ metadata:
    App: frontend
 spec:
  containers:
- 
  - name: n1
    image: nginx
 
