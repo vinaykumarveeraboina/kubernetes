@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: greenapp
-        image: devopswithcloudhub/nginx:blue
+        image: devopswithcloudhub/nginx:green
 ---
 apiVersion: v1
 kind: Service
