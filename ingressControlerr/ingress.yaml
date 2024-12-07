@@ -3,10 +3,28 @@ kind: Ingress
 metadata:
   name: firstingress
   annotations: 
-   kubernetes.io/ingress.class : "gce"
+    kubernetes.io/ingress.class: "gce"
 spec:
- defaultBackend:
-   service:
-    name: bluesvc
-    port:
-     number: 80
+  defaultBackend:
+    service:
+      name: bluesvc
+      port:
+        number: 80
+  rules:
+  - http: 
+      paths:
+      - path: /green
+        pathType: Prefix
+        backend: 
+          service:
+            name: greensvc
+            port:
+              number: 80
+      - path: /orange
+        pathType: Prefix
+        backend: 
+          service:
+            name: orangesvc
+            port:
+              number: 80
+
