@@ -15,5 +15,5 @@ spec:
        - name : dsecret
       containers:
       - name: myapp
-        image: vinaykumarveeraboina/vinayubuntuimage:ping
+        image: vinayubuntuimage:ping
         imagePullPolicy : Always 
