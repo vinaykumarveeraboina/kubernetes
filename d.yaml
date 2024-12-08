@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+spec:
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      imagePullSecret :
+       - name : dsecret
+      containers:
+      - name: myapp
+        image: vinaykumarveeraboina/vinayubuntuimage:ping
+        imagePullPlolicy : always 
