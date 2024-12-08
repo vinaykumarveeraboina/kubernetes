@@ -1,19 +1,11 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: Pod
 metadata:
   name: myapp
 spec:
-  selector:
-    matchLabels:
-      app: myapp
-  template:
-    metadata:
-      labels:
-        app: myapp
-    spec:
-      imagePullSecrets :
-       - name : dsecret
-      containers:
-      - name: myapp
-        image: vinayubuntuimage:ping
-        imagePullPolicy : Always 
+  containers:
+  - name: myapp
+    image: vinaykumarveeraboina/vinayubuntuimage:ping
+  imagePullSecrets:
+  - name: dsecret
+
