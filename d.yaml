@@ -16,4 +16,4 @@ spec:
       containers:
       - name: myapp
         image: vinaykumarveeraboina/vinayubuntuimage:ping
-        imagePullPlolicy : Always 
+        imagePullPolicy : Always 
