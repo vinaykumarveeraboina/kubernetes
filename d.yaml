@@ -11,9 +11,9 @@ spec:
       labels:
         app: myapp
     spec:
-      imagePullSecret :
+      imagePullSecrets :
        - name : dsecret
       containers:
       - name: myapp
         image: vinaykumarveeraboina/vinayubuntuimage:ping
-        imagePullPlolicy : always 
+        imagePullPlolicy : Always 
