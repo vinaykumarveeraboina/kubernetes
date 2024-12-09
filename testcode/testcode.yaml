@@ -1,0 +1,264 @@
+
+
+#namespace.yaml:
+
+apiVersion: v1                    # Kubernetes API version
+kind: Namespace                   # Resource type - creates a new namespace
+metadata:                         # Metadata section for the resource
+  name: mq-cluster               # Name of the namespace
+  labels:                        # Labels for organization/selection
+    name: mq-cluster             # Label matching namespace name
+---
+#storage/storage-class.yaml:
+
+apiVersion: storage.k8s.io/v1     # Storage API version
+kind: StorageClass                # Defines storage class type
+metadata:
+  name: mq-storage               # Name of the storage class
+provisioner: kubernetes.io/aws-ebs # AWS EBS volume provisioner
+parameters:
+  type: gp3                      # EBS volume type (General Purpose SSD)
+  encrypted: "true"              # Enable encryption for volumes
+reclaimPolicy: Retain            # Keep volume when PVC is deleted
+allowVolumeExpansion: true       # Allows volume size increases
+volumeBindingMode: WaitForFirstConsumer # Only provision volume when pod needs it
+
+---
+#storage/persistent-volume-claim.yaml:
+
+apiVersion: v1                    # Kubernetes API version
+kind: PersistentVolumeClaim      # PVC resource type
+metadata:
+  name: qmgr-data                # PVC name
+  namespace: mq-cluster          # Namespace where PVC exists
+spec:
+  accessModes:
+    - ReadWriteOnce              # Single node read/write access
+  resources:
+    requests:
+      storage: 10Gi              # Request 10GB storage
+  storageClassName: mq-storage   # Use our defined storage class
+---
+#config/configmap.yaml:
+
+apiVersion: v1                    # Kubernetes API version
+kind: ConfigMap                   # ConfigMap resource type
+metadata:
+  name: qmgr-config              # ConfigMap name
+  namespace: mq-cluster          # Namespace
+data:
+  mq.ini: |                      # MQ main configuration file
+    GenericQueueManager:         # Queue manager section
+      Name=HA_QMGR              # Queue manager name
+    
+    Channels:                    # Channel configuration
+      MaxChannels=1000          # Maximum number of channels
+      MaxActiveChannels=1000    # Maximum active channels
+    
+    TCP:                        # TCP settings
+      KeepAlive=yes            # Enable TCP keepalive
+    
+    TuningParameters:           # Performance tuning
+      DefaultPutResponse=1      # Async put response
+      DefaultQueueManager=yes   # Default queue manager flag
+      
+  qm.ini: |                     # Queue manager specific config
+    QMNAME=HA_QMGR             # Queue manager name
+    MAXACTIVE=1000             # Max active connections
+    MAXQDEPTH=-1               # Unlimited queue depth
+---    
+#security/secret.yaml:
+
+apiVersion: v1                    # Kubernetes API version
+kind: Secret                      # Secret resource type
+metadata:
+  name: qmgr-credentials         # Secret name
+  namespace: mq-cluster          # Namespace
+type: Opaque                      # Generic secret type
+stringData:                       # Clear text data (encrypted at rest)
+  admin.password: changeit       # Admin password
+  app.password: changeit         # Application password
+  keystore.password: changeit    # Keystore password
+---
+#security/service-account.yaml:
+
+apiVersion: v1                    # Kubernetes API version
+kind: ServiceAccount              # ServiceAccount resource type
+metadata:
+  name: mq-service-account       # ServiceAccount name
+  namespace: mq-cluster          # Namespace
+---  
+#security/role.yaml:
+
+apiVersion: rbac.authorization.k8s.io/v1  # RBAC API version
+kind: Role                                # Role resource type
+metadata:
+  name: mq-role                          # Role name
+  namespace: mq-cluster                  # Namespace
+rules:                                    # Permission rules
+- apiGroups: [""]                        # Core API group
+  resources: ["pods", "services"]        # Resources to access
+  verbs: ["get", "list", "watch"]       # Allowed actions
+- apiGroups: [""]
+  resources: ["configmaps", "secrets"]   # Additional resources
+  verbs: ["get"]                        # Read-only access
+---
+#security/role-binding.yaml:
+
+apiVersion: rbac.authorization.k8s.io/v1  # RBAC API version
+kind: RoleBinding                         # RoleBinding resource type
+metadata:
+  name: mq-role-binding                  # RoleBinding name
+  namespace: mq-cluster                  # Namespace
+subjects:                                 # Who gets the permissions
+- kind: ServiceAccount                    # Type of subject
+  name: mq-service-account               # ServiceAccount name
+  namespace: mq-cluster                  # Namespace
+roleRef:                                  # Role being bound
+  kind: Role                             # Type of role
+  name: mq-role                          # Role name
+  apiGroup: rbac.authorization.k8s.io    # API group for role
+---
+#network/service.yaml:
+
+apiVersion: v1                    # Kubernetes API version
+kind: Service                     # Service resource type
+metadata:
+  name: qmgr-service             # Service name
+  namespace: mq-cluster          # Namespace
+spec:
+  selector:                       # Pod selector
+    app: ha-qmgr                 # Match pods with this label
+  ports:                         # Port definitions
+    - name: qmgr                 # MQ port name
+      port: 1414                 # Service port
+      targetPort: 1414           # Container port
+    - name: web-console         # Console port name
+      port: 9443                # Service port
+      targetPort: 9443          # Container port
+  type: ClusterIP               # Internal service type
+---
+#network/route.yaml:
+
+apiVersion: route.openshift.io/v1  # OpenShift Route API
+kind: Route                        # Route resource type
+metadata:
+  name: qmgr-console               # Route name
+  namespace: mq-cluster            # Namespace
+spec:
+  to:
+    kind: Service                  # Target resource type
+    name: qmgr-service            # Service name
+  port:
+    targetPort: web-console       # Target port name
+  tls:                            # TLS configuration
+    termination: reencrypt        # Re-encrypt traffic
+    insecureEdgeTerminationPolicy: Redirect  # Force HTTPS
+---
+#workload/statefulset.yaml (key parts):
+
+apiVersion: apps/v1               # Apps API version
+kind: StatefulSet                 # StatefulSet resource type
+spec:
+  serviceName: qmgr-service       # Headless service name
+  replicas: 3                     # Number of replicas
+  # ... Pod template configuration with:
+  # - Anti-affinity rules for HA
+  # - Resource limits and requests
+  # - Health probes
+  # - Volume mounts
+  # - Environment variables
+  selector:
+    matchLabels:
+      app: ha-qmgr
+  template:
+    metadata:
+      labels:
+        app: ha-qmgr
+    spec:
+      serviceAccountName: mq-service-account
+      terminationGracePeriodSeconds: 30
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - ha-qmgr
+              topologyKey: kubernetes.io/hostname
+      containers:
+        - name: qmgr
+          image: icr.io/ibm-messaging/mq:9.3.3.0-r1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 1414
+              name: qmgr
+            - containerPort: 9443
+              name: web-console
+          env:
+            - name: LICENSE
+              value: "accept"
+            - name: MQ_QMGR_NAME
+              value: "HA_QMGR"
+            - name: MQ_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: qmgr-credentials
+                  key: admin.password
+          resources:
+            requests:
+              cpu: "1"
+              memory: "2Gi"
+            limits:
+              cpu: "2"
+              memory: "4Gi"
+          readinessProbe:
+            exec:
+              command: ["chkmqready"]
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+          livenessProbe:
+            exec:
+              command: ["chkmqhealth"]
+            initialDelaySeconds: 60
+            periodSeconds: 15
+            timeoutSeconds: 5
+          volumeMounts:
+            - name: qmgr-data
+              mountPath: /var/mqm
+            - name: qmgr-config
+              mountPath: /etc/mqm/
+              readOnly: true
+      volumes:
+        - name: qmgr-config
+          configMap:
+            name: qmgr-config
+  volumeClaimTemplates:
+    - metadata:
+        name: qmgr-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: mq-storage
+        resources:
+          requests:
+            storage: 10Gi
+---
+#monitoring/servicemonitor.yaml:
+
+apiVersion: monitoring.coreos.com/v1  # Prometheus Operator API
+kind: ServiceMonitor                  # ServiceMonitor type
+metadata:
+  name: qmgr-monitor                 # Monitor name
+  namespace: mq-cluster              # Namespace
+spec:
+  selector:                          # Service selector
+    matchLabels:
+      app: ha-qmgr                  # Match MQ service
+  endpoints:                         # Monitoring endpoints
+    - port: web-console             # Port to monitor
+      scheme: https                 # HTTPS protocol
+      tlsConfig:
+        insecureSkipVerify: true    # Skip TLS verificati
