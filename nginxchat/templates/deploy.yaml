@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{values.name}}
+  name: {{.values.name}}
 spec:
-  replicas: {{values.replicas.default}}
+  replicas: {{.values.replicas.default}}
   selector:
     matchLabels:
       app: nginx
@@ -16,4 +16,4 @@ spec:
     spec:  
       containers:
       - name: nginxblue
-        image: {{values.image.name}}:{{values.image.tag}}
+        image: {{.values.image.name}}:{{.values.image.tag}}
