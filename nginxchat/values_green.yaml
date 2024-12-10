@@ -1,0 +1,8 @@
+name: nginxdeploy
+image:
+ name: devopswithcloudhub/nginx
+ tag: green
+replicas:
+ default: 2
+ 
+
