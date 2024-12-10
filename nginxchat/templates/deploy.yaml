@@ -7,12 +7,12 @@ spec:
   selector:
     matchLabels:
       app: nginx
-      version: blue
+      version: blues
   template:
     metadata:
       labels:
         app: nginx
-        version: blue
+        version: blues
     spec:  
       containers:
       - name: nginxblue
