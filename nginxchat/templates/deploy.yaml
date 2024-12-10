@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginxdeploy
+  name: {{values.name}}
 spec:
-  replicas: 3
+  replicas: {{values.replicas.default}}
   selector:
     matchLabels:
       app: nginx
@@ -16,4 +16,4 @@ spec:
     spec:  
       containers:
       - name: nginxblue
-        image: devopswithcloudhub/nginx:blue
+        image: {{values.image.name}}:{{values.image.tag}}
