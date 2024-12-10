@@ -16,4 +16,4 @@ spec:
     spec:  
       containers:
       - name: nginxblue
-        image: {{.Values.image.name}}:{{.values.image.tag}}
+        image: {{.Values.image.name}}:{{.Values.image.tag}}
